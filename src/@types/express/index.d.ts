@@ -1,5 +1,6 @@
 declare namespace Express {
     interface Request {
-        teste: any;
+        uploaded: boolean;
+        description: boolean;
     }
 }
