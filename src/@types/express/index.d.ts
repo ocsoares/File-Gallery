@@ -1,6 +1,8 @@
 declare namespace Express {
     interface Request {
         uploaded: boolean;
-        description: boolean;
+        descriptionExist: boolean;
+        fileExist: boolean;
+        fileMimeType: string[];
     }
 }

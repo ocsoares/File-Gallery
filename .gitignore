@@ -2,3 +2,5 @@ dist
 node_modules
 .env
 TODO.md
+src/config/firebase-key.json
+/uploads
