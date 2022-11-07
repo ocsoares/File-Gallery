@@ -3,6 +3,8 @@ import admin from 'firebase-admin';
 import { Request, Response, NextFunction } from 'express';
 
 import serviceAccount from '../config/firebase-key.json';
+import { shortURLAPI } from './shortURLService';
+import { GalleryModel } from '../models/GalleryModel';
 
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount as any),
@@ -11,36 +13,56 @@ admin.initializeApp({
 
 const storageBucket = admin.storage().bucket();
 
-// MODO para UM Arquivo, tentar fazer para ARRAY !! <<
-export const uploadFileToFirebase = (req: Request, res: Response, next: NextFunction) => {
+export const uploadFileToFirebase = async (req: Request, res: Response, next: NextFunction) => {
+
     const requestFiles = req.files as Express.Multer.File[];
 
-    const toObject = requestFiles[0];
+    // Enviando múltiplos Arquivos !! <<
+    requestFiles.forEach(files => {
+        const filesMimeType = files.mimetype;
 
-    const filesMimeType = toObject.mimetype;
+        const fileNames = files.filename;
 
-    const fileNames = toObject.filename;
+        const fileInBucket = storageBucket.file(fileNames);
 
-    const fileInBucket = storageBucket.file(fileNames);
+        const sendFileToFirebase = fileInBucket.createWriteStream({
+            metadata: {
+                contentType: filesMimeType
+            }
+        });
 
-    const sendFileToFirebase = fileInBucket.createWriteStream({
-        metadata: {
-            contentType: filesMimeType
-        }
+        // const data = Date.now() + 1000 * 60 * 10;
+
+        // Outra data... // 200 Anos !
+        const currentDate = new Date();
+        const newDate = new Date(currentDate.setFullYear(currentDate.getFullYear() + 200)).toString();
+
+        // Cria um link que dá Acesso a alguma funcionalidade da Conta, especificada no action, por um Determinado tempo (expires) !! <<
+        fileInBucket.getSignedUrl({ action: 'read', expires: newDate }).then(async (url) => {
+            const upload_url = await shortURLAPI(url.toString());
+
+            const saveUploadURL = new GalleryModel({
+                file_name: fileNames,
+                upload_url: upload_url.data.shortUrl
+            });
+
+            await saveUploadURL.save();
+        });
+
+        sendFileToFirebase.on('error', (error) => {
+            console.log(error.message);
+        });
+
+        sendFileToFirebase.on('finish', async () => {
+            // Torna o Arquivo PÚBLICO
+            await fileInBucket.makePrivate();
+        });
+
+        sendFileToFirebase.end(files.buffer); // ENVIA os Arquivos !! <<
+
     });
 
-    sendFileToFirebase.on('error', (error) => {
-        console.log(error.message);
-    });
-
-    sendFileToFirebase.on('finish', async () => {
-        // Torna o Arquivo PÚBLICO
-        await fileInBucket.makePublic();
-    });
-
-    sendFileToFirebase.end(toObject.buffer); // ENVIA !! <<
-
-    console.log('TESTE:', toObject);
+    console.log('Arquivo(s) enviado(s) com sucesso para o Firebase !');
 
     next();
 };

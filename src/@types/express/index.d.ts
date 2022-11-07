@@ -3,6 +3,5 @@ declare namespace Express {
         uploaded: boolean;
         descriptionExist: boolean;
         fileExist: boolean;
-        fileMimeType: string[];
     }
 }

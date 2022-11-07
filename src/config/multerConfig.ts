@@ -1,6 +1,6 @@
 
 import multer, { Options } from 'multer';
-import path from 'path';
+import { UTF8Decode } from '../helpers/UT8CodeAndDecode';
 
 // Armazenamento LOCAL, com diskStorage !! <<
 // const storageDestination: string = path.join(__dirname, '../../uploads');
@@ -19,7 +19,7 @@ export default {
     fileFilter: (req, file, callback) => {
         const { description } = req.body;
 
-        file.filename = `${Date.now()}_${file.originalname}`;
+        file.filename = `${Date.now()}_${UTF8Decode(file.originalname)}`;
 
         if (!file) {
             req.fileExist = false;

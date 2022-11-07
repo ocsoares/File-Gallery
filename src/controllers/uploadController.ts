@@ -1,8 +1,9 @@
 import { Request, Response, NextFunction } from 'express';
 import path from 'path';
+import { GalleryModel } from '../models/GalleryModel';
 import { UploadModel } from '../models/UploadModel';
 
-export class UploadController {
+export class GalleryController {
     static async uploadFile(req: Request, res: Response, next: NextFunction) {
         const { description } = req.body;
 
@@ -35,7 +36,7 @@ export class UploadController {
             description,
             file_name: filenameArray,
             file_extension: fileExtensionArray,
-            storage_location: 'locally'
+            storage_location: 'external_service'
         });
 
         await saveUpload.save();
@@ -52,5 +53,19 @@ export class UploadController {
         }
 
         next();
+    }
+
+    static async showGallery(req: Request, res: Response) {
+        const savedFiles = await GalleryModel.find();
+
+        const getGallery = savedFiles.map(files => ({
+            file_name: files.file_name,
+            uploaded_url: files.upload_url
+        }));
+
+        return res.json({
+            message: 'Files saved in gallery !',
+            getGallery
+        });
     }
 }
