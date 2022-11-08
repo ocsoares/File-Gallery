@@ -23,9 +23,7 @@ export class GalleryController {
         const requestFiles = req.files as Express.Multer.File[];
 
         if (!requestFiles) {
-            return res.status(400).json({
-                error: 'Forneça algum arquivo !'
-            });
+            return errorToUpload(400, 'Forneça algum arquivo !');
         }
 
         const filenameArray = requestFiles!.map(files => files.filename);
@@ -46,13 +44,13 @@ export class GalleryController {
             saveUpload
         });
 
+        next();
+
         function errorToUpload(statusCode: number, message: string) {
             res.status(statusCode).json({
                 error: message
             });
         }
-
-        next();
     }
 
     static async showGallery(req: Request, res: Response) {

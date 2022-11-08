@@ -7,7 +7,7 @@ import { shortURLAPI } from './shortURLService';
 import { GalleryModel } from '../models/GalleryModel';
 
 admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount as any),
+    credential: admin.credential.cert(serviceAccount as object),
     storageBucket: process.env.STORAGE_BUCKET_URL
 });
 
@@ -31,9 +31,7 @@ export const uploadFileToFirebase = async (req: Request, res: Response, next: Ne
             }
         });
 
-        // const data = Date.now() + 1000 * 60 * 10;
-
-        // Outra data... // 200 Anos !
+        // 200 Anos !
         const currentDate = new Date();
         const newDate = new Date(currentDate.setFullYear(currentDate.getFullYear() + 200)).toString();
 
