@@ -4,3 +4,4 @@ node_modules
 TODO.md
 src/config/firebase-key.json
 /uploads
+/Files to send
