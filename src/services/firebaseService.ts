@@ -2,7 +2,7 @@ import 'dotenv/config';
 import admin from 'firebase-admin';
 import { Request, Response, NextFunction, response } from 'express';
 
-import serviceAccount from '../config/firebase-key.json';
+// import serviceAccount from '../config/firebase-key.json';
 import { shortURLAPI } from './shortURLService';
 import { GalleryModel } from '../models/GalleryModel';
 import path from 'path';
