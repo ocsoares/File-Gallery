@@ -6,9 +6,7 @@ import { shortURLAPI } from './shortURLService';
 import { GalleryModel } from '../models/GalleryModel';
 import path from 'path';
 
-const teste = path.resolve();
-const folder = path.join(teste, '/src/firebase-key.json');
-console.log(folder);
+const __dirname = path.resolve();
 
 // fs.readdirSync(folder).forEach(file => {
 //     console.log(file);
@@ -20,7 +18,11 @@ console.log(folder);
 
 if (process.env.NODE_ENV) {
     console.log('PRODUÇÃO !!!');
-    const serviceAccount = require('../firebase-key.json');
+
+    const fileInProduction = path.join(__dirname, '/src/firebase-key.json');
+    console.log(fileInProduction);
+
+    const serviceAccount = require(fileInProduction);
 
     admin.initializeApp({
         credential: admin.credential.cert(serviceAccount as object),
