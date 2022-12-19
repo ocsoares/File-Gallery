@@ -9,7 +9,7 @@ import path from 'path';
 import fs from 'fs';
 
 const teste = path.resolve();
-const folder = path.join(teste, '/etc/secrets');
+const folder = path.join(teste);
 console.log(folder);
 
 fs.readdirSync(folder).forEach(file => {
