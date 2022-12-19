@@ -6,18 +6,22 @@ import { Request, Response, NextFunction } from 'express';
 import { shortURLAPI } from './shortURLService';
 import { GalleryModel } from '../models/GalleryModel';
 import path from 'path';
+import fs from 'fs';
 
-const __dirname = path.resolve();
+const teste = path.resolve();
+const folder = path.join(teste, '/etc/secrets');
+console.log(folder);
 
-const teste = require(`${__dirname}/etc/secrets/<firebase-key.json>`);
-console.log('TESTE:', teste);
+fs.readdirSync(folder).forEach(file => {
+    console.log(file);
+});
 
-const arroz = require(`${__dirname}/etc/secrets/<arroz>`);
-console.log('ARROZ:', arroz);
-
+const serviceAccount = {
+    name: 'dsfsdffs'
+};
 
 admin.initializeApp({
-    credential: admin.credential.cert(arroz as object),
+    credential: admin.credential.cert(serviceAccount as object),
     storageBucket: process.env.STORAGE_BUCKET_URL
 });
 
