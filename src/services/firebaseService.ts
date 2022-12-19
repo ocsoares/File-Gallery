@@ -2,7 +2,7 @@ import 'dotenv/config';
 import admin from 'firebase-admin';
 import { Request, Response, NextFunction } from 'express';
 
-import serviceAccount from '../config/firebase-key.json';
+// import serviceAccount from '../config/firebase-key.json';
 import { shortURLAPI } from './shortURLService';
 import { GalleryModel } from '../models/GalleryModel';
 import path from 'path';
@@ -13,7 +13,7 @@ const arroz = require(`${__dirname}/etc/secrets/arroz`);
 console.log('ARROZ:', arroz);
 
 admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount as object),
+    credential: admin.credential.cert(arroz as object),
     storageBucket: process.env.STORAGE_BUCKET_URL
 });
 
