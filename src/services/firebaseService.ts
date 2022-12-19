@@ -2,15 +2,13 @@ import 'dotenv/config';
 import admin from 'firebase-admin';
 import { Request, Response, NextFunction } from 'express';
 
-import serviceAccount from '../firebase-key.json';
 import { shortURLAPI } from './shortURLService';
 import { GalleryModel } from '../models/GalleryModel';
 import path from 'path';
-import fs from 'fs';
 
-// const teste = path.resolve();
-// const folder = path.join(teste, '/src/firebase-key.json');
-// console.log(folder);
+const teste = path.resolve();
+const folder = path.join(teste, '/src/firebase-key.json');
+console.log(folder);
 
 // fs.readdirSync(folder).forEach(file => {
 //     console.log(file);
@@ -20,10 +18,24 @@ import fs from 'fs';
 //     name: 'dsfsdffs'
 // };
 
-admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount as object),
-    storageBucket: process.env.STORAGE_BUCKET_URL
-});
+if (process.env.NODE_ENV) {
+    console.log('PRODUÇÃO !!!');
+    const serviceAccount = require('../firebase-key.json');
+
+    admin.initializeApp({
+        credential: admin.credential.cert(serviceAccount as object),
+        storageBucket: process.env.STORAGE_BUCKET_URL
+    });
+}
+else {
+    console.log('DESENVOLVIMENTO !!!');
+    const serviceAccount = require('../config/firebase-key.json');
+
+    admin.initializeApp({
+        credential: admin.credential.cert(serviceAccount as object),
+        storageBucket: process.env.STORAGE_BUCKET_URL
+    });
+}
 
 const storageBucket = admin.storage().bucket();
 
