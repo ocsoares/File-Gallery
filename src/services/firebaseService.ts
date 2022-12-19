@@ -9,8 +9,8 @@ import path from 'path';
 
 const __dirname = path.resolve();
 
-const teste = require(`${__dirname}/etc/secrets/firebase-key.json`);
-console.log('TESTE:', teste);
+const serviceAccount = require(`${__dirname}/etc/secrets/firebase-key.json`);
+console.log('TESTE:', serviceAccount);
 
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount as object),
