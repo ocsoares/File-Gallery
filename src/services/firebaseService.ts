@@ -1,16 +1,16 @@
 import 'dotenv/config';
 import admin from 'firebase-admin';
-import { Request, Response, NextFunction, response } from 'express';
+import { Request, Response, NextFunction } from 'express';
 
-// import serviceAccount from '../config/firebase-key.json';
+import serviceAccount from '../config/firebase-key.json';
 import { shortURLAPI } from './shortURLService';
 import { GalleryModel } from '../models/GalleryModel';
 import path from 'path';
 
 const __dirname = path.resolve();
 
-const serviceAccount = require(`${__dirname}/etc/secrets/firebase-key`);
-console.log('TESTE:', serviceAccount);
+const arroz = require(`${__dirname}/etc/secrets/arroz`);
+console.log('ARROZ:', arroz);
 
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount as object),
