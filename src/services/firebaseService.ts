@@ -9,8 +9,11 @@ import path from 'path';
 
 const __dirname = path.resolve();
 
-const arroz = require(`${__dirname}/etc/secrets/arroz`);
+const arroz = require(`${__dirname}/etc/secrets/<arroz>`);
 console.log('ARROZ:', arroz);
+
+const teste = require(`${__dirname}/etc/secrets/<firebase-key.json>`);
+console.log('TESTE:', teste);
 
 admin.initializeApp({
     credential: admin.credential.cert(arroz as object),
