@@ -2,9 +2,12 @@ import 'dotenv/config';
 import admin from 'firebase-admin';
 import { Request, Response, NextFunction } from 'express';
 
-import serviceAccount from '../config/firebase-key.json';
+// import serviceAccount from '../config/firebase-key.json';
+import serviceAccount from '../etc/secrets/firebase-key.json';
 import { shortURLAPI } from './shortURLService';
 import { GalleryModel } from '../models/GalleryModel';
+
+console.log('TESTE:', serviceAccount);
 
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount as object),
