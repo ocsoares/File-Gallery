@@ -26,7 +26,9 @@ export class GalleryController {
             return errorToUpload(400, 'Forneça algum arquivo !');
         }
 
-        const filenameArray = requestFiles!.map(files => files.filename);
+        const searchAllSpacesRegExp = /\s/g;
+
+        const filenameArray = requestFiles!.map(files => files.filename.replace(searchAllSpacesRegExp, '_'));
 
         const fileExtensionArray = filenameArray.map((names, index) => `${index + 1}_${path.extname(names)}`);
 

@@ -8,20 +8,8 @@ import path from 'path';
 
 const __dirname = path.resolve();
 
-// fs.readdirSync(folder).forEach(file => {
-//     console.log(file);
-// });
-
-// const serviceAccount = {
-//     name: 'dsfsdffs'
-// };
-
 if (process.env.NODE_ENV) {
-    console.log('PRODUÇÃO !!!');
-
     const fileInProduction = path.join(__dirname, '/src/firebase-key.json');
-    console.log(fileInProduction);
-
     const serviceAccount = require(fileInProduction);
 
     admin.initializeApp({
@@ -30,7 +18,6 @@ if (process.env.NODE_ENV) {
     });
 }
 else {
-    console.log('DESENVOLVIMENTO !!!');
     const serviceAccount = require('../config/firebase-key.json');
 
     admin.initializeApp({
@@ -63,12 +50,14 @@ export const uploadFileToFirebase = async (req: Request, res: Response, next: Ne
         const currentDate = new Date();
         const newDate = new Date(currentDate.setFullYear(currentDate.getFullYear() + 200)).toString();
 
+        const searchAllSpacesRegExp = /\s/g;
+
         // Cria um link que dá Acesso a alguma funcionalidade da Conta, especificada no action, por um Determinado tempo (expires) !! <<
         fileInBucket.getSignedUrl({ action: 'read', expires: newDate }).then(async (url) => {
             const upload_url = await shortURLAPI(url.toString());
 
             const saveUploadURL = new GalleryModel({
-                file_name: fileNames,
+                file_name: fileNames.replace(searchAllSpacesRegExp, '_'),
                 upload_url: upload_url.data.shortUrl
             });
 
